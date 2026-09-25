@@ -1,4 +1,5 @@
- import { Blog } from '../models/blog.model.js'
+import mongoose from 'mongoose';
+import { Blog } from '../models/blog.model.js'
 
 
  export const createBlog = async (req, res) =>{
@@ -64,3 +65,51 @@
     })
 
  }
+ export const getAllBlogs = async (req, res) => {
+    try {
+        const blogs = await Blog.find().populate('user', 'name email');
+        res.status(200).json({
+            success: true,
+            message: "All blogs retrieved successfully",
+            blogs
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving blogs",
+            error: error.message
+        });
+    }
+};
+
+export const getBlogById = async (req, res)=>{
+    try {
+        const blogId = req.params.id.replace(/^:/, '');
+
+        if (!mongoose.isValidObjectId(blogId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid blog id"
+            });
+        }
+
+        const blog = await Blog.findById(blogId);
+        if(!blog){
+            return res.status(404).json({
+                success: false,
+                message: "Blog not found"
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Blog retrieved successfully",
+            blog
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving blog",
+            error: error.message
+        });
+    }
+}
