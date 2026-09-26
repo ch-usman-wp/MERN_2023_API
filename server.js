@@ -12,8 +12,6 @@ app.use(cookieparser());
 
 dotenv.config();
 
-connectDB();
-
 app.use(express.json());
 
 app.use(cors({
@@ -38,4 +36,10 @@ app.use((error, req, res, next) => {
 });
 
 const port = process.env.PORT || 4000;
-app.listen(port, ()=>console.log(`server is running ${port}`))
+
+connectDB()
+    .then(() => app.listen(port, () => console.log(`server is running ${port}`)))
+    .catch((error) => {
+        console.error('Database connection failed:', error.message);
+        process.exit(1);
+    });

@@ -3,9 +3,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const connectDB =() =>mongoose.connect(process.env.MONGO_URI, {
-    dbName: 'mern-youtube',
-}).then(()=>console.log('DB connected'))
-.catch((err)=>console.log(err));
+export const connectDB = async () => {
+    if (!process.env.MONGO_URI) {
+        throw new Error('MONGO_URI is not configured');
+    }
+
+    await mongoose.connect(process.env.MONGO_URI, {
+        dbName: 'mern-youtube',
+    });
+
+    console.log('DB connected');
+};
 
 
