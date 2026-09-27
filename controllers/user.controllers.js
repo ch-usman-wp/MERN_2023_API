@@ -26,56 +26,18 @@ export const userRegister = async (req, res)=>{
 }
 
 export const userLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-          // Find user
-        const user = await User.findOne({ email });
-
-        // Check required fields
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Email and password are required"
-            });
-        }
-
-      
-
-        if (!user) {
-            return res.status(400).json({
-                success: false,
-                message: "User does not exist"
-            });
-        }
-  
-        // Compare password with hashed password in database
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid credentials"
-            });
-        }
-        
-        // Don't send password to client
-        const userResponse = {
-            _id: user._id,
-            name: user.name,
-            email: user.email
-        };
-
-        genrateCookie(userResponse, res, 200, 'User logged in successfully');
-
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
-    }
+   const {email,password} = req.body  
+    let user = await User.findOne({email});
+    if(!user) return res.status(400).json({
+        success:false,
+        messge:"User Not exist"
+    })
+    const isMatch = await bcrypt.compare(password,user.password)  
+    if(!isMatch)return res.status(400).json({
+        success:false,
+        message:"Invalid credential"
+    })
+    generateCookie(user,res,201,`Welcome ${user.name}`)
 }
 
 export const getMyProfile = (req, res) => {
