@@ -37,7 +37,7 @@ export const userLogin = async (req, res) => {
         success:false,
         message:"Invalid credential"
     })
-    generateCookie(user,res,201,`Welcome ${user.name}`)
+    genrateCookie(user,res,201,`Welcome ${user.name}`)
 }
 
 export const getMyProfile = (req, res) => {
