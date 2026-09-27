@@ -7,7 +7,7 @@ export const genrateCookie = (user, res, statusCode=200, message) =>{
         res.status(statusCode).cookie("token", token,{
             httpOnly: true,
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-            sameSite: isProduction ? "none" : "lax",
+            sameSite: "none",
             secure: isProduction,
         }).json({
             success: true,
