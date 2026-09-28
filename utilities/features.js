@@ -25,6 +25,7 @@ export const genrateCookie = (user, res, statusCode = 200, message) => {
     }).json({
         success: true,
         message: message,
-        user: safeUser
+        user: safeUser,
+        token   // ← YEH LINE ADD KI
     });
 };
